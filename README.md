@@ -1,5 +1,10 @@
-# A Latent Morphology Model for Open-Vocabulary Neural Machine Translation
+# A Latent Morphology Model for Open-Vocabulary Neural Machine Translation (fork)
 
+My own fork of *Latent Morphology Model for Open-Vocabulary Neural Machine Translation* by D. Ataman
+
+
+
+--- 
 
 This software implements the Neural Machine Translation model based on Hierchical Character-based Decoding using Variational Inference.
 
