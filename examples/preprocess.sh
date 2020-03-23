@@ -1,10 +1,11 @@
-HOME=/home/ubuntu
+HOME_DIR=$(echo $HOME)
 
 python=python
-exp_dir=$HOME/experiments/tr-en
-opennmt=$HOME/Char-NMT
 src=tr
 tgt=en
+repo_root=$(pwd)/..
+exp_dir=$repo_root/experiments/"$src-$tgt"
+opennmt=$HOME_DIR/Char-NMT
 
 mkdir -p $exp_dir
 
