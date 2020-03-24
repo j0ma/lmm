@@ -1,23 +1,18 @@
-HOME_DIR=$(echo $HOME)
-
-python=python
-src=tr
-tgt=en
-repo_root=$(pwd)/..
-exp_dir=$repo_root/experiments/"$src-$tgt"
-opennmt=$HOME_DIR/Char-NMT
-
-mkdir -p $exp_dir
+python=$HOME/anaconda3/bin/python
+exp_dir=$HOME/experiments/en-tr
+opennmt=$HOME/lmm
+src=en
+tgt=tr
 
 $python $opennmt/preprocess.py \
-	-train_src $exp_dir/train.$src \
-	-train_tgt $exp_dir/train.$tgt \
-	-valid_src $exp_dir/dev.$src \
-	-valid_tgt $exp_dir/dev.$tgt \
-	-save_data $exp_dir/iwslt \
-	-src_data_type text-trigram \
-	-tgt_data_type text-trigram \
-	-src_vocab_size 40000 \
-	-tgt_vocab_size 40000 \
-	-src_seq_length 100 \
-	-tgt_seq_length 100
+    -train_src $exp_dir/train.$src \
+    -train_tgt $exp_dir/train.$tgt \
+    -valid_src $exp_dir/dev.$src \
+    -valid_tgt $exp_dir/dev.$tgt \
+    -save_data $exp_dir/iwslt \
+    -src_data_type words \
+    -tgt_data_type characters \
+    -src_vocab_size 40000 \
+    -tgt_vocab_size 40000 \
+    -src_seq_length 100 \
+    -tgt_seq_length 100
