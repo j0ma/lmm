@@ -2,7 +2,13 @@
 
 My own fork of *Latent Morphology Model for Open-Vocabulary Neural Machine Translation* by D. Ataman
 
+### Todo
 
+- [x] host dataset somewhere
+- [] write `download-data.sh`
+- [] preprocess corpus into correct format
+    - [] TED dataset
+    - [] IWSLT dataset
 
 --- 
 
