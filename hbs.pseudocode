@@ -1,0 +1,20 @@
+HBS(hyp, best, t)
+-----------------
+newhyp = ()
+for (seq, score, state) in hyp:
+    (chars, logpr, state_hat) = CharRNNFwd(tail(seq), state)
+    for (c, lp) in (chars, logpr):
+        hyp = (seq++c, score+lp, state)
+        if is_solution(hyp) and score(hyp) > score(best):
+            best = hyp
+        else:
+            push(newhyp, hyp)
+    newhyp = prune(newhyp, best)
+    newhyp = top_b(newhyp)
+    newhyp.state = WordRNNFwd(newhyp)
+    if newhyp:
+        return HBS(newhyp, best, t+1)
+    else:
+        return best
+    
+            
