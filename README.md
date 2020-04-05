@@ -2,12 +2,20 @@
 
 My own fork of *Latent Morphology Model for Open-Vocabulary Neural Machine Translation* by D. Ataman
 
+### Notes
+- Using `subword-nmt` from Sennrich's group for the BPE learning
+- Going to use `moses` for tokenization/truecasing
+
 ### Todo
 
 - [x] host dataset somewhere
-- [] write `download-data.sh`
+- [x] write `download-data.sh` to download and extract TED xml
+- [] write tokenization/lowercasing/truecasing/BPE scripts
+    - [] tokenization of src/tgt
+    - [] truecasing model for each lang pair
+    - [] bpe of english target side
 - [] preprocess corpus into correct format
-    - [] TED dataset
+    - [x] TED dataset
     - [] IWSLT dataset
 
 --- 
