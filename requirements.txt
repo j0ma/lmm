@@ -3,4 +3,3 @@ tqdm
 torchtext>=0.2.1
 future
 subword-nmt
-sacremoses
