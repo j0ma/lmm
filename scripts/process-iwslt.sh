@@ -43,12 +43,14 @@ do
             grep "IWSLT1[0-9].TED.${DATASET}.${SRC}-${TGT}.[${SRC}|${TGT}]" | \
             head -n 2)
         do
-            mkdir -p $DATASET
-            mv $f $DATASET
+            mkdir -p tmp
+            mv $f tmp
         done
     done
     cd ..
     rm ${SRC}-${TGT}/*
+    mv ${SRC}-${TGT}/tmp/* ${SRC}-${TGT}
+    rm -R ${SRC}-${TGT}/tmp
 done
 
 echo "at end working directory is: $(pwd)"
