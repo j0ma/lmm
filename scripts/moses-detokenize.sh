@@ -9,7 +9,7 @@ INPUT_FILE=$2
 OUTPUT_FILE=$3
 
 $DETOKENIZER_SCRIPT \
-    -l $LANGUAGE \
+    -q -l $LANGUAGE \
     < $INPUT_FILE \
     > $OUTPUT_FILE
 

@@ -8,11 +8,11 @@
 SRC_LANG=$1
 TGT_LANG=$2
 SCRIPTS_PATH=$3
-ROOT_PATH=$4
+TED_PATH=$4
 SCRIPTS_DIR="${SCRIPTS_PATH}/perl"
-WORKING_DIR="${ROOT_PATH}/ted-staging"
-INPUT_DIR="${ROOT_PATH}/ted-raw"
-OUTPUT_DIR="${ROOT_PATH}/ted-clean/${SRC_LANG}-${TGT_LANG}"
+WORKING_DIR="${TED_PATH}/ted-staging"
+INPUT_DIR="${TED_PATH}/ted-raw"
+OUTPUT_DIR="${TED_PATH}/ted-clean/${SRC_LANG}-${TGT_LANG}"
 
 echo "Preparing data for ${SRC_LANG} ${TGT_LANG} ..."
 
