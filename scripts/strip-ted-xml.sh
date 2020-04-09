@@ -12,7 +12,7 @@ TED_PATH=$4
 SCRIPTS_DIR="${SCRIPTS_PATH}/perl"
 WORKING_DIR="${TED_PATH}/ted-staging"
 INPUT_DIR="${TED_PATH}/ted-raw"
-OUTPUT_DIR="${TED_PATH}/ted-clean/${SRC_LANG}-${TGT_LANG}"
+OUTPUT_DIR="${TED_PATH}/${SRC_LANG}-${TGT_LANG}/train"
 
 echo "Preparing data for ${SRC_LANG} ${TGT_LANG} ..."
 
@@ -228,3 +228,13 @@ mv $SENT_CLEAN_TEST_TGT $OUTPUT_DIR/ted_test_${SRC_LANG}-${TGT_LANG}.${TGT_LANG}
 mv $TED_TRAIN_TGT_SENT_CLEAN $OUTPUT_DIR/ted_train.${TGT_LANG}
 
 rm -Rf $WORKING_DIR
+
+###########################
+###   rename things     ###
+###########################
+mkdir -p $OUTPUT_DIR/final
+cat $OUTPUT_DIR/ted_train_${SRC_LANG}-${TGT_LANG}.${SRC_LANG} $OUTPUT_DIR/ted_test_${SRC_LANG}-${TGT_LANG}.${SRC_LANG} >> $OUTPUT_DIR/final/train.${SRC_LANG}
+cat $OUTPUT_DIR/ted_train_${SRC_LANG}-${TGT_LANG}.${TGT_LANG} $OUTPUT_DIR/ted_test_${SRC_LANG}-${TGT_LANG}.${TGT_LANG} >> $OUTPUT_DIR/final/train.${TGT_LANG}
+rm $OUTPUT_DIR/*
+mv $OUTPUT_DIR/final/* $OUTPUT_DIR
+rm -R $OUTPUT_DIR/final

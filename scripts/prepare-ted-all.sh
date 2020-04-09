@@ -9,5 +9,5 @@ SRC_LANG=en
 
 for TGT_LANG in ar cs tr
 do
-    $SCRIPTS_PATH/prepare-ted-single-pair.sh ${SRC_LANG} ${TGT_LANG} ${SCRIPTS_PATH} ${TED_PATH}
+    $SCRIPTS_PATH/strip-ted-xml.sh ${SRC_LANG} ${TGT_LANG} ${SCRIPTS_PATH} ${TED_PATH}
 done
