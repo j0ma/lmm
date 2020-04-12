@@ -5,6 +5,9 @@ My own fork of *Latent Morphology Model for Open-Vocabulary Neural Machine Trans
 ### Notes
 - Using `subword-nmt` from Sennrich's group for the BPE learning
 - Going to use `moses` for tokenization/truecasing
+- BPE for English can be learned
+    - a) Separately for each EN-TGT pair
+    - b) Jointly from all EN training data
 
 ### Todo
 

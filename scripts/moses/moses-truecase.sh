@@ -12,4 +12,4 @@ $TRUECASE_TRAINING_SCRIPT \
     --model $MODEL_FILE \
     < $INPUT_FILE \
     > $OUTPUT_FILE
-
+ 

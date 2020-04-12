@@ -2,7 +2,7 @@
 
 # download-data.sh
 
-BPESIZE=16000
+BPE_SIZE=16000
 
 # Downloads the TED & IWSLT corpora
 SCRIPTS_PATH="$(pwd)/scripts"
@@ -15,6 +15,7 @@ if [ -z $DATA_PATH ];
 then
     DATA_PATH=$HOME"/lmm-data"
 fi
+
 TRAIN_PATH=$DATA_PATH/train
 DEVTEST_PATH=$DATA_PATH/devtest
 mkdir -p $TRAIN_PATH
@@ -66,11 +67,20 @@ done
 rm -Rf train
 rm -Rf devtest
 
-echo "Applying preprocessing steps with Moses (tokenization, truecasing, ...)"
-$SCRIPTS_PATH/moses/moses-preprocessing-all.sh $SCRIPTS_PATH $DEVTEST_PATH
 
-echo "Learning BPE with subword-nmt..."
-$SCRIPTS_PATH/bpe-preprocessing-all.sh $SCRIPTS_PATH $TRAIN_PATH $BPESIZE
+echo "Applying preprocessing steps with Moses (tokenization, truecasing, ...)"
+for TGT in ar cs tr
+do
+    $SCRIPTS_PATH/moses/moses-preprocessing-all.sh \
+        "${SCRIPTS_PATH}/moses" $DATA_PATH $SRC $TGT
+done
+
+echo "Learning & applying BPE with subword-nmt..."
+for TGT in ar cs tr
+do
+    $SCRIPTS_PATH/bpe-preprocessing-all.sh \
+        $DATA_PATH $SRC $TGT $BPE_SIZE
+done
 
 echo "Download and processing complete!"
 tree $DATA_PATH || ls -l $DATA_PATH
