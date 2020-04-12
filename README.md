@@ -1,13 +1,15 @@
 # A Latent Morphology Model for Open-Vocabulary Neural Machine Translation (fork)
 
 My own fork of *Latent Morphology Model for Open-Vocabulary Neural Machine Translation* by D. Ataman
-
+ 
 ### Notes
 - Using `subword-nmt` from Sennrich's group for the BPE learning
 - Going to use `moses` for tokenization/truecasing
+    - Always make sure `$MOSES_SCRIPTS` is set to point to the folder containing Moses' perl scripts
 - BPE for English can be learned
     - a) Separately for each EN-TGT pair
     - b) Jointly from all EN training data
+- Make sure to set the `$LMM_REPO` environment variable to point to the repository
 
 ### Todo
 
