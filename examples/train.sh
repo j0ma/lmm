@@ -1,8 +1,19 @@
-python=$HOME/anaconda3/bin/python
-exp_dir=$HOME/experiments/en-tr
-opennmt=$HOME/lmm
+#!/bin/sh
+
+if [ -z $LMM_REPO ]
+then
+    echo "Environment variable LMM_REPO not set!"
+    echo "Be sure to make it point to the LMM repository"
+    echo "before running train.sh"
+    exit 1
+fi
+
+python=$(which python)
 src=en
-tgt=tr
+tgt=$1
+exp_dir=$HOME/lmm-data/$src-$tgt
+opennmt=$LMM_REPO
+
 num_epochs=200
 
 $python $opennmt/train.py \

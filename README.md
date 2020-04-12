@@ -10,18 +10,22 @@ My own fork of *Latent Morphology Model for Open-Vocabulary Neural Machine Trans
     - a) Separately for each EN-TGT pair
     - b) Jointly from all EN training data
 - Make sure to set the `$LMM_REPO` environment variable to point to the repository
+    - There is now a check for this in `preprocess.sh`
+- Make sure to use python 3.6 or earlier since 3.7 gives an odd error message about StopIteration
+    - Alternatively you can go dig in the source code but it's probably easier to just 
 
 ### Todo
 
 - [x] host dataset somewhere
 - [x] write `download-data.sh` to download and extract TED xml
-- [] write tokenization/lowercasing/truecasing/BPE scripts
-    - [] tokenization of src/tgt
-    - [] truecasing model for each lang pair
-    - [] bpe of english target side
-- [] preprocess corpus into correct format
+- [x] write tokenization/lowercasing/truecasing/BPE scripts
+    - [x] tokenization of src/tgt
+    - [x] truecasing model for each lang pair
+    - [x] bpe of english target side
+- [x] preprocess corpus into correct format
     - [x] TED dataset
-    - [] IWSLT dataset
+    - [x] IWSLT dataset
+
 
 --- 
 

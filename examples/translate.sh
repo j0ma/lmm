@@ -1,13 +1,15 @@
-python=$HOME/anaconda3/bin/python
-exp_dir=$HOME/experiments/en-tr
-opennmt=$HOME/lmm
+python=$(which python)
 src=en
-tgt=tr
+tgt=$1
+exp_dir=$HOME/lmm-data/$src-$tgt
+opennmt=$LMM_REPO
+model_path=$2
+gpu_device=$3
 
 $python $opennmt/translate.py \
-    -model $exp_dir/model_acc_60.91_ppl_6.65_e92.pt \
+    -model "${model_path}" \
     -src_data_type words \
     -tgt_data_type characters \
-    -src $exp_dir/test.$src \
-    -output $exp_dir/test.output.$src \
-    -gpu 0
+    -src "${exp_dir}/test.${src}" \
+    -output "${exp_dir}/test.output.${src}" \
+    -gpu $gpu_device
