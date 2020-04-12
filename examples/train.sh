@@ -13,11 +13,11 @@ src=en
 tgt=$1
 exp_dir=$HOME/lmm-data/$src-$tgt
 opennmt=$LMM_REPO
-
+save_data_dir=$exp_dir/demo
 num_epochs=200
 
 $python $opennmt/train.py \
-    -data $exp_dir/iwslt \
+    -data $save_data_dir \
     -epochs $num_epochs \
     -word_vec_size 512 \
     -enc_layers 1 \
