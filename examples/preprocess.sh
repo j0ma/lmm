@@ -10,10 +10,10 @@ fi
 
 python=$(which python)
 src=en
-tgt=tr
+tgt=$1
 exp_dir=$HOME/lmm-data/$src-$tgt
 opennmt=$LMM_REPO
-save_data_dir=$exp_dir/tmp-save
+save_data_dir=$exp_dir/demo
 
 mkdir -p $save_data_dir
 
