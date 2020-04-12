@@ -30,7 +30,7 @@ fi
 for kind in train dev test
 do
     echo "Applying BPE to ${kind} set..."
-    INPUT_FILE="${kind}/${kind}.en"
+    INPUT_FILE="${kind}/${kind}.tok.true.en"
     OUTPUT_FILE="${kind}/${kind}.bpe.en"
     subword-nmt apply-bpe -c $CODES_FILE < $INPUT_FILE > $OUTPUT_FILE
 done

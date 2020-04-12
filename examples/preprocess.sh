@@ -1,11 +1,13 @@
-python=$HOME/anaconda3/bin/python
-exp_dir=$HOME/experiments/en-tr
-opennmt=$HOME/lmm
+python=$(which python)
 src=en
 tgt=tr
+exp_dir=$HOME/lmm-data/$src-$tgt
+opennmt=$(pwd)
+
+echo "Experiment dir: ${exp_dir}"
 
 $python $opennmt/preprocess.py \
-    -train_src $exp_dir/train.$src \
+    -train_src $exp_dir/train/train.$src \
     -train_tgt $exp_dir/train.$tgt \
     -valid_src $exp_dir/dev.$src \
     -valid_tgt $exp_dir/dev.$tgt \
