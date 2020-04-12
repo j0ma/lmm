@@ -1,5 +1,13 @@
 #!/bin/sh
 
+if [ -z $LMM_REPO ]
+then
+    echo "Environment variable LMM_REPO not set!"
+    echo "Be sure to make it point to the LMM repository"
+    echo "before running preprocess.sh"
+    exit 1
+fi
+
 python=$(which python)
 src=en
 tgt=tr
