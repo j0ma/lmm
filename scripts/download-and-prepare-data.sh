@@ -25,8 +25,8 @@ cd $TRAIN_PATH
 echo "Downloading compresed training corpus if needed..."
 if [ -z $(ls | grep "${TRAINING_DATA_ARCHIVE}") ]
 then
-    #wget $TRAINING_CORPUS_URL
-    cp /tmp/$TRAINING_DATA_ARCHIVE .
+    wget $TRAINING_CORPUS_URL
+    #cp /tmp/$TRAINING_DATA_ARCHIVE .
 else
     echo "Compressed corpus exists! No need to download."
 fi
@@ -42,8 +42,8 @@ cd $DEVTEST_PATH
 echo "Downloading compresed dev/test corpus if needed..."
 if [ -z $(ls | grep "${DEVTEST_DATA_ARCHIVE}") ]
 then
-    #wget $DEVTEST_CORPUS_URL
-    cp /tmp/$DEVTEST_DATA_ARCHIVE .
+    wget $DEVTEST_CORPUS_URL
+    #cp /tmp/$DEVTEST_DATA_ARCHIVE .
 else
     echo "Compressed corpus exists! No need to download."
 fi
