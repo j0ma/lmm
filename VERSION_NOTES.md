@@ -1,7 +1,9 @@
 ### Notes about versions etc.
 
 - this repo is based on open-nmt version: unknown
-    - based on the repo structure & some diffing against different versions of OpenNMT-py, this is no later than 
+    - based on the repo structure & some diffing against different versions of OpenNMT-py, this seems like an early version
+    - could it be based on v0.1? 
+
 - torchtext version: 0.2.1, 0.5.0
 
 This is based on sasha's response [here](https://github.com/OpenNMT/OpenNMT-py/issues/767) after I observed an error relating to `tensor_type` with newer version than 0.2.1
