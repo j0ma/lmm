@@ -3,6 +3,7 @@
 - this repo is based on open-nmt version: unknown
     - based on the repo structure & some diffing against different versions of OpenNMT-py, this seems like an early version
     - could it be based on v0.1? 
+        - **YES!** see ![setup.py](https://github.com/j0ma/lmm/blob/master/setup.py) in the repo
 
 - torchtext version: 0.2.1, 0.5.0
 
