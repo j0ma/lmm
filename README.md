@@ -25,7 +25,8 @@ My own fork of *Latent Morphology Model for Open-Vocabulary Neural Machine Trans
 - [x] preprocess corpus into correct format
     - [x] TED dataset
     - [x] IWSLT dataset
-
+- [] get `examples/train.sh` working
+- [] get `examples/translate.sh` working
 
 --- 
 
