@@ -83,7 +83,7 @@ class DiagonalGaussianSampler(Sampler):
         :return: A random Gaussian vector.
         """
 
-        N = tdist.Normal(torch.tensor([0.0]), torch.tensor([1.0]))
+        N = tdist.Normal(torch.Tensor([0.0]), torch.Tensor([1.0]))
         e = N.sample(sample_shape=torch.Size([batch_size, self.latent_dim]))
         return mean + variance * e.squeeze(2).cuda()
 
@@ -155,11 +155,11 @@ class Kuma(RelaxedBinary):
     def log_pdf(self, x):
         t1 = torch.log(self.a) + torch.log(self.b) 
         t2 = (self.a - 1) * torch.log(x + 0.001)
-        t3 = (self.b - 1) * torch.log(1. - torch.min(torch.pow(x, self.a), torch.tensor([0.999]).cuda()))
+        t3 = (self.b - 1) * torch.log(1. - torch.min(torch.pow(x, self.a), torch.Tensor([0.999]).cuda()))
         return t1 + t2 + t3    
     
     def log_cdf(self, x):
-        return torch.log(1. - torch.min(torch.pow((1. - torch.pow(x, self.a)), self.b), torch.tensor([0.999]).cuda()))
+        return torch.log(1. - torch.min(torch.pow((1. - torch.pow(x, self.a)), self.b), torch.Tensor([0.999]).cuda()))
 
 class StretchedVariable(RelaxedBinary):
     
@@ -189,7 +189,7 @@ class StretchedVariable(RelaxedBinary):
         x_ = (x - self.loc) / self.scale
         # and assess the stretched pdf using the original pdf 
         # see eq 25 (left) of Louizos et al
-        return self._dist.log_pdf(x_) - torch.log(torch.tensor([self.scale]).cuda())
+        return self._dist.log_pdf(x_) - torch.log(torch.Tensor([self.scale]).cuda())
     
     def log_cdf(self, x):
         # shrink the stretched variable

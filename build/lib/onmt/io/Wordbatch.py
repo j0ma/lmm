@@ -166,8 +166,8 @@ class TargetCharBatch(object):
                         max_char_len = max([x.size(0) for x in idx_batch])
                         seq_lens = [x.size(1) for x in idx_batch]
                         max_seq_len = max(seq_lens)
-                        idx_batch = [torch.cat([torch.tensor([[2,2]+[1]*(x.size(0)-2)]).transpose(0,1).cuda(), x], dim=1) for x in idx_batch]
-                        idx_batch = [torch.cat([x, torch.tensor([[5,5,3,4]+[1]*(x.size(0)-4)]).transpose(0,1).cuda()], dim=1) for x in idx_batch]  
+                        idx_batch = [torch.cat([torch.Tensor([[2,2]+[1]*(x.size(0)-2)]).transpose(0,1).cuda(), x], dim=1) for x in idx_batch]
+                        idx_batch = [torch.cat([x, torch.Tensor([[5,5,3,4]+[1]*(x.size(0)-4)]).transpose(0,1).cuda()], dim=1) for x in idx_batch]  
                         idx_batch = [F.pad(x[1::], (0, max_seq_len+2-x.size(1), 0, max_char_len-x.size(0)), 'constant', 1) for x in idx_batch]
                         for x in idx_batch:
                             for i in range(x.size(1)):
@@ -238,8 +238,8 @@ class BothTrigramBatch(object):
                         max_char_len = max([x.size(0) for x in idx_batch])
                         seq_lens = [x.size(1) for x in idx_batch]
                         max_seq_len = max(seq_lens)
-                        idx_batch = [torch.cat([torch.tensor([[2,2]+[1]*(x.size(0)-2)]).transpose(0,1).cuda(), x], dim=1) for x in idx_batch]
-                        idx_batch = [torch.cat([x, torch.tensor([[5,5,3,4]+[1]*(x.size(0)-4)]).transpose(0,1).cuda()], dim=1) for x in idx_batch]
+                        idx_batch = [torch.cat([torch.Tensor([[2,2]+[1]*(x.size(0)-2)]).transpose(0,1).cuda(), x], dim=1) for x in idx_batch]
+                        idx_batch = [torch.cat([x, torch.Tensor([[5,5,3,4]+[1]*(x.size(0)-4)]).transpose(0,1).cuda()], dim=1) for x in idx_batch]
                         idx_batch = [F.pad(x[1::], (0, max_seq_len+2-x.size(1), 0, max_char_len-x.size(0)), 'constant', 1) for x in idx_batch]
                         for x in idx_batch:
                             for i in range(x.size(1)):
