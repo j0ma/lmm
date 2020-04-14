@@ -1,5 +1,22 @@
 #!/bin/sh
 
+
+python=$(which python)
+src=en
+tgt=$1
+exp_dir=$HOME/lmm-data/$src-$tgt
+opennmt=$LMM_REPO
+save_data_dir=$exp_dir/demo
+save_model_dir=$exp_dir/model
+log_file_name="${src}-${tgt}.train.log"
+num_epochs=200
+
+if [ -z $tgt ]
+then
+    echo "Must provide target language as command line argument!"
+    exit 1
+fi
+
 if [ -z $LMM_REPO ]
 then
     echo "Environment variable LMM_REPO not set!"
@@ -8,13 +25,11 @@ then
     exit 1
 fi
 
-python=$(which python)
-src=en
-tgt=$1
-exp_dir=$HOME/lmm-data/$src-$tgt
-opennmt=$LMM_REPO
-save_data_dir=$exp_dir/demo
-num_epochs=200
+if [ -z $gpu_device_id ]
+then
+    echo "Variable \"gpu_device_id\" not set, defaulting to gpu_device_id=0"
+    gpu_device_id=0
+fi
 
 $python $opennmt/train.py \
     -data $save_data_dir \
@@ -25,7 +40,7 @@ $python $opennmt/train.py \
     -seed 1234 \
     -rnn_size 512 \
     -rnn_type GRU \
-    -encoder_type birnn \
+    -encoder_type brnn \
     -decoder_type charrnn \
     -tgt_data_type characters \
     -optim adam \
@@ -34,8 +49,7 @@ $python $opennmt/train.py \
     -dropout 0.2 \
     -start_decay_at $num_epochs \
     -start_checkpoint_at 5 \
-    -save_model $exp_dir/model \
-    -gpu 1 \
-    -gpuid 1 \
-    -max_grad_norm 1 > log.out
-
+    -save_model $save_model_dir \
+    -gpu $gpu_device_id \
+    -gpuid $gpu_device_id \
+    -max_grad_norm 1 > $log_file_name
