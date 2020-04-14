@@ -1081,7 +1081,11 @@ class StdWordRNNDecoder(RNNWordDecoderBase):
             z = self.sampler_z(wordrnn_output, batch_size, translate) # lemma
             #f, logloss = self.sampler_f(torch.cat([wordrnn_output, z], dim=1), batch_size, translate) # morphological features
             #word_rep = self.tanh(self.wordcomposition(torch.cat([z, f], dim=1)))
-            f = torch.Tensor([[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0]]).cuda()
+            f = torch.Tensor([[0,0,0,0,0,0,0,0,0,0],
+                              [0,0,0,0,0,0,0,0,0,0],
+                              [0,0,0,0,0,0,0,0,0,0],
+                              [0,0,0,0,0,0,0,0,0,0],
+                              [0,0,0,0,0,0,0,0,0,0]]).cuda()
             logloss=0
             
             print('About to calculate word composition from encoder:')

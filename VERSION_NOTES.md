@@ -1,5 +1,7 @@
 ### Notes about versions etc.
 
+- Based on `.travis.yml`, Python 3.5 and 2.7 are supported
+
 - this repo is based on open-nmt version: unknown
     - based on the repo structure & some diffing against different versions of OpenNMT-py, this seems like an early version
     - could it be based on v0.1? 
