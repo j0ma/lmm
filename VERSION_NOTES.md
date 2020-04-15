@@ -1,5 +1,9 @@
 ### Notes about versions etc.
 
+- Code seems to use `torch.tensor` which was introduced in `pytorch 0.4.0`
+- Code also seems to use `Variable` which was merged with `Tensor` in 0.4.0.
+    - Confusing!
+
 - Based on `.travis.yml`, Python 3.5 and 2.7 are supported
 
 - this repo is based on open-nmt version: unknown
