@@ -16,8 +16,6 @@ then
     echo "MOSES_SCRIPTS environment variable must be set!"
     echo "Using the perl scripts inside scripts/moses/perl..."
     export MOSES_SCRIPTS=$SCRIPTS_PATH/moses/perl
-    tree $MOSES_SCRIPTS || ls $MOSES_SCRIPTS
-    exit 1
 fi
 
 if [ -z $DATA_PATH ];

@@ -1,8 +1,16 @@
 # A Latent Morphology Model for Open-Vocabulary Neural Machine Translation (fork)
 
 My own fork of *Latent Morphology Model for Open-Vocabulary Neural Machine Translation* by D. Ataman
+
+### Steps to reproduce
+
+1. Install moses
+2. Install python dependencies
+3. Run `scripts/download-and-prepare-data.sh`
  
 ### Notes
+- On AWS, `pytorch==1.4.0`, `torchtext=0.2.1` gets train.py to line 240
+
 - Using `subword-nmt` from Sennrich's group for the BPE learning
 - Going to use `moses` for tokenization/truecasing
     - Always make sure `$MOSES_SCRIPTS` is set to point to the folder containing Moses' perl scripts
