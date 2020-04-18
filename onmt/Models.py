@@ -1038,7 +1038,7 @@ class StdWordRNNDecoder(RNNWordDecoderBase):
             attns["coverage"] = []
 
         # Predict word representations with the bi-directional char-rnn
-        char_embs = self.embeddings(tgt)
+        char_embs = self.embeddings(tgt.cuda()) # Jonne changed here
         assert char_embs.dim() == 3  # len x batch x embedding_dim
         chars_len, batch_seqlen, emb_dim = char_embs.size()
         
