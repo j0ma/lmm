@@ -11,6 +11,15 @@ TRAINING_CORPUS_URL="https://j0ma.keybase.pub/datasets/${TRAINING_DATA_ARCHIVE}"
 DEVTEST_DATA_ARCHIVE="iwslt-datasets-lmm.zip"
 DEVTEST_CORPUS_URL="https://j0ma.keybase.pub/datasets/${DEVTEST_DATA_ARCHIVE}"
 
+if [ -z $MOSES_SCRIPTS ];
+then
+    echo "MOSES_SCRIPTS environment variable must be set!"
+    echo "Using the perl scripts inside scripts/moses/perl..."
+    export MOSES_SCRIPTS=$SCRIPTS_PATH/moses/perl
+    tree $MOSES_SCRIPTS || ls $MOSES_SCRIPTS
+    exit 1
+fi
+
 if [ -z $DATA_PATH ];
 then
     DATA_PATH=$HOME"/lmm-data"
