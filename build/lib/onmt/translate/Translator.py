@@ -410,8 +410,8 @@ class Translator(object):
 
         # (0) Prep each of the components of the search.
         # And helper method for reducing verbosity.
-        max_chars = 20
-        self.max_length = 200
+        max_chars = 250
+        self.max_length = 250
         batch_size = batch.batch_size
         src_data_type = data.src_data_type
         tgt_data_type = data.tgt_data_type
@@ -558,7 +558,7 @@ class Translator(object):
                                 beam_scores[k][bi] = -1000
                         # Pick the best hypotheses
                         if fin_c[k] == 1:
-                            best_c_hyp_score, best_c_scores_id = torch.tensor(c_hyps_scores[k]).topk(beam_size,0,True,True)
+                            best_c_hyp_score, best_c_scores_id = torch.Tensor(c_hyps_scores[k]).topk(beam_size,0,True,True)
                             best_c_hyp = [c_hyps[k][ind] for ind in best_c_scores_id]
                             c_hyps[k] = best_c_hyp
                             c_hyps_scores[k] = [best_c_hyp_score[ind] for ind in range(beam_size)]
@@ -581,7 +581,7 @@ class Translator(object):
                     if i == 0:
                         #init the word beam
                         best_hyp = c_hyps[k*beam_size]
-                        best_hyp_score = torch.tensor(c_hyps_scores[k*beam_size])
+                        best_hyp_score = torch.Tensor(c_hyps_scores[k*beam_size])
                         word_beam[k*beam_size:(k+1)*beam_size] = best_hyp
                         word_beam_scores.append(best_hyp_score)
                     else:

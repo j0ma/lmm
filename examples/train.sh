@@ -50,6 +50,7 @@ $python $opennmt/train.py \
     -start_decay_at $num_epochs \
     -start_checkpoint_at 5 \
     -save_model $save_model_dir \
-    -gpu $gpu_device_id \
-    -gpuid $gpu_device_id \
     -max_grad_norm 1 > $log_file_name
+
+    #-gpu $gpu_device_id \
+    #-gpuid $gpu_device_id \

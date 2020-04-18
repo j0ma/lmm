@@ -67,7 +67,7 @@ class DiagonalGaussianSampler(ReparametrisationSampler):
         :return: A random Gaussian vector.
         """
 
-        N = tdist.Normal(torch.tensor([0.0]), torch.tensor([1.0]))
+        N = tdist.Normal(torch.Tensor([0.0]), torch.Tensor([1.0]))
         e = N.sample(sample_shape=self.latent_dim)
         return mean + variance * e
 

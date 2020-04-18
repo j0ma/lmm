@@ -13,6 +13,9 @@ My own fork of *Latent Morphology Model for Open-Vocabulary Neural Machine Trans
     - There is now a check for this in `preprocess.sh`
 - Make sure to use python 3.6 or earlier since 3.7 gives an odd error message about StopIteration
     - Alternatively you can go dig in the source code but it's probably easier to just 
+- There seems to be two versions of `Samplers.py`
+    - `onmt.modules.Samplers` and `onmt.Samplers`
+    - The former seems to be commented out 
 
 ### Todo
 
@@ -34,7 +37,7 @@ This software implements the Neural Machine Translation model based on Hierchica
 
 ## Options
 
-### Hiearchical Decoder with Compositional Word Embeddings and Character-level Generation with Variational Inference 
+# ## Hiearchical Decoder with Compositional Word Embeddings and Character-level Generation with Variational Inference 
 
   To activate the character-level decoder, select
 
