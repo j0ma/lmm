@@ -169,7 +169,7 @@ class TargetCharBatch(object):
                         
                         for ix, x in enumerate(idx_batch):
                             _new = torch.cat([
-                                        torch.Tensor([[2,2]+[1]*(x.size(0)-2)], dtype=torch.long)
+                                        torch.tensor([[2,2]+[1]*(x.size(0)-2)], dtype=torch.long)
                                              .transpose(0,1)
                                              .cuda(), 
                                         x.cuda()
@@ -179,7 +179,7 @@ class TargetCharBatch(object):
                         for ix, x in enumerate(idx_batch):
                             _new = torch.cat([
                                         x.cuda(), 
-                                        torch.Tensor([[5,5,3,4]+[1]*(x.size(0)-4)], dtype=torch.long)
+                                        torch.tensor([[5,5,3,4]+[1]*(x.size(0)-4)], dtype=torch.long)
                                              .transpose(0,1)
                                              .cuda()
                                     ], dim=1) 
