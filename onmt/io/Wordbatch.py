@@ -188,7 +188,7 @@ class TargetCharBatch(object):
                         
                         idx_batch = [F.pad(x[1::], (0, max_seq_len+2-x.size(1), 0, max_char_len-x.size(0)), 'constant', 1) for x in idx_batch]
                        
-                       for x in idx_batch:
+                        for x in idx_batch:
                             for i in range(x.size(1)):
                                 for j in range(x.size(0)):
                                     if x[j,i] == 3 and j != 1:
