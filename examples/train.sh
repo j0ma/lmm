@@ -9,7 +9,7 @@ opennmt=$LMM_REPO
 save_data_dir=$exp_dir/demo
 save_model_dir=$exp_dir/model
 log_file_name="${src}-${tgt}.train.log"
-num_epochs=200
+num_epochs=1
 
 if [ -z $tgt ]
 then
@@ -50,7 +50,6 @@ $python $opennmt/train.py \
     -start_decay_at $num_epochs \
     -start_checkpoint_at 5 \
     -save_model $save_model_dir \
-    -max_grad_norm 1 > $log_file_name
-
-    #-gpu $gpu_device_id \
-    #-gpuid $gpu_device_id \
+    -max_grad_norm 1 \
+    -gpu $gpu_device_id \
+    -gpuid $gpu_device_id > $log_file_name 
