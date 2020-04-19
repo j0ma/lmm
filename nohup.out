@@ -1,0 +1,34 @@
+Environment variable LMM_REPO not set!
+Be sure to make it point to the LMM repository
+before running preprocess.sh
+Experiment dir: /home/ubuntu/lmm-data/en-cs
+Save data dir: /home/ubuntu/lmm-data/en-cs/demo
+Traceback (most recent call last):
+  File "/home/ubuntu/lmm/preprocess.py", line 9, in <module>
+    import torch
+ModuleNotFoundError: No module named 'torch'
+Experiment dir: /home/ubuntu/lmm-data/en-cs
+Save data dir: /home/ubuntu/lmm-data/en-cs/demo
+Extracting features...
+ * number of source features: 0.
+ * number of target features: 0.
+Building `Fields` object...
+Building & saving training data...
+ * saving train data shard to /home/ubuntu/lmm-data/en-cs/demo.train.1.pt.
+Building & saving vocabulary...
+ * reloading /home/ubuntu/lmm-data/en-cs/demo.train.1.pt.
+ * tgt vocab size: 1004.
+ * src vocab size: 15576.
+Building & saving validation data...
+ * saving valid data shard to /home/ubuntu/lmm-data/en-cs/demo.valid.1.pt.
+Variable "gpu_device_id" not set, defaulting to gpu_device_id=0
+/home/ubuntu/miniconda3/envs/lmm/lib/python3.6/site-packages/torch/nn/modules/rnn.py:50: UserWarning: dropout option adds dropout after all but last recurrent layer, so non-zero dropout expects num_layers greater than 1, but got dropout=0.2 and num_layers=1
+  "num_layers={}".format(dropout, num_layers))
+/home/ubuntu/miniconda3/envs/lmm/lib/python3.6/site-packages/torch/nn/_reduction.py:43: UserWarning: size_average and reduce args will be deprecated, please use reduction='sum' instead.
+  warnings.warn(warning.format(ret))
+/home/ubuntu/lmm/onmt/Optim.py:95: UserWarning: torch.nn.utils.clip_grad_norm is now deprecated in favor of torch.nn.utils.clip_grad_norm_.
+  clip_grad_norm(self.params, self.max_grad_norm)
+/home/ubuntu/miniconda3/envs/lmm/lib/python3.6/site-packages/torchtext/data/field.py:320: UserWarning: volatile was removed and now has no effect. Use `with torch.no_grad():` instead.
+  return Variable(arr, volatile=not train), lengths
+/home/ubuntu/miniconda3/envs/lmm/lib/python3.6/site-packages/torchtext/data/field.py:321: UserWarning: volatile was removed and now has no effect. Use `with torch.no_grad():` instead.
+  return Variable(arr, volatile=not train)
