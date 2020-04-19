@@ -1038,7 +1038,7 @@ class StdWordRNNDecoder(RNNWordDecoderBase):
             attns["coverage"] = []
 
         # Predict word representations with the bi-directional char-rnn
-        char_embs = self.embeddings(tgt.cuda()) # Jonne changed here
+        char_embs = self.embeddings(tgt)
         assert char_embs.dim() == 3  # len x batch x embedding_dim
         chars_len, batch_seqlen, emb_dim = char_embs.size()
         
@@ -1088,9 +1088,9 @@ class StdWordRNNDecoder(RNNWordDecoderBase):
                               # [0,0,0,0,0,0,0,0,0,0]]).cuda()
             # logloss=0
             
-            print('About to calculate word composition from encoder:')
-            print(f'Dimension of z: {z.size}')
-            print(f'Dimension of f: {f.size}')
+            # print('About to calculate word composition from encoder:')
+            # print(f'Dimension of z: {z.size()}')
+            # print(f'Dimension of f: {f.size()}')
             # word_rep = self.wordcomposition(torch.cat([z, f], dim=1))
             # Get the predicted word using the attention.
             attn_out, p_attn, ctx = self.attn(
