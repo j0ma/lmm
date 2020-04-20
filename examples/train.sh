@@ -1,7 +1,4 @@
-#!/bin/sh
-
-
-python=$(which python)
+python=/home/ubuntu/miniconda3/envs/lmm/bin/python3.6
 src=en
 tgt=$1
 exp_dir=$HOME/lmm-data/$src-$tgt
@@ -10,6 +7,8 @@ save_data_dir=$exp_dir/demo
 save_model_dir=$exp_dir/model
 log_file_name="${src}-${tgt}.train.log"
 num_epochs=1
+
+python --version
 
 if [ -z $tgt ]
 then

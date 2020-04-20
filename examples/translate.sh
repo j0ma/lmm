@@ -1,10 +1,12 @@
-python=$(which python)
+python=/home/ubuntu/miniconda3/envs/lmm/bin/python3.6
 src=en
 tgt=$1
 exp_dir=$HOME/lmm-data/$src-$tgt
 opennmt=$LMM_REPO
 model_path=$2
 gpu_device=$3
+
+python --version
 
 $python $opennmt/translate.py \
     -model "${model_path}" \

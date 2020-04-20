@@ -166,20 +166,41 @@ class TargetCharBatch(object):
                         max_char_len = max([x.size(0) for x in idx_batch])
                         seq_lens = [x.size(1) for x in idx_batch]
                         max_seq_len = max(seq_lens)
-                        idx_batch = [torch.cat([torch.Tensor([[2,2]+[1]*(x.size(0)-2)]).transpose(0,1).cuda(), x], dim=1) for x in idx_batch]
-                        idx_batch = [torch.cat([x, torch.Tensor([[5,5,3,4]+[1]*(x.size(0)-4)]).transpose(0,1).cuda()], dim=1) for x in idx_batch]  
-                        idx_batch = [F.pad(x[1::], (0, max_seq_len+2-x.size(1), 0, max_char_len-x.size(0)), 'constant', 1) for x in idx_batch]
+                        
+                        for ix, x in enumerate(idx_batch):
+                            _new = torch.cat([
+                                        torch.tensor([[2,2]+[1]*(x.size(0)-2)], dtype=torch.long)
+                                             .transpose(0,1)
+                                             .cuda(), 
+                                        x.cuda()
+                                    ], dim=1)
+                            idx_batch[ix] = _new
+                        
+                        for ix, x in enumerate(idx_batch):
+                            _new = torch.cat([
+                                        x.cuda(), 
+                                        torch.tensor([[5,5,3,4]+[1]*(x.size(0)-4)], dtype=torch.long)
+                                             .transpose(0,1)
+                                             .cuda()
+                                    ], dim=1) 
+                            idx_batch[ix] = _new
+                       
+                        for ix, x in enumerate(idx_batch):
+                                _new = F.pad(x[1::], 
+                                             (0, max_seq_len+2-x.size(1), 0, max_char_len-x.size(0)), 
+                                             'constant', 1) 
+                                idx_batch[ix] = _new
+
                         for x in idx_batch:
                             for i in range(x.size(1)):
                                 for j in range(x.size(0)):
                                     if x[j,i] == 3 and j != 1:
                                         x[j,i] = 1
+
                         idx_batch = torch.cat(idx_batch, dim=-1)
                         setattr(self, name, idx_batch)
                     else:
                         setattr(self, name, field.process(batch, device=device, train=train))
-                        
-
 
     @classmethod
     def fromvars(cls, dataset, batch_size, train=True, **kwargs):

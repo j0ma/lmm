@@ -8,7 +8,7 @@ then
     exit 1
 fi
 
-python=$(which python)
+python=python
 src=en
 tgt=$1
 exp_dir=$HOME/lmm-data/$src-$tgt
