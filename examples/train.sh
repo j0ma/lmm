@@ -1,4 +1,4 @@
-python=/home/ubuntu/miniconda3/envs/lmm/bin/python3.6
+python=$(which python)
 src=en
 tgt=$1
 exp_dir=$HOME/lmm-data/$src-$tgt
@@ -7,8 +7,6 @@ save_data_dir=$exp_dir/demo
 save_model_dir=$exp_dir/model
 log_file_name="${src}-${tgt}.train.log"
 num_epochs=1
-
-python --version
 
 if [ -z $tgt ]
 then
@@ -47,7 +45,7 @@ $python $opennmt/train.py \
     -learning_rate_decay 0.9 \
     -dropout 0.2 \
     -start_decay_at $num_epochs \
-    -start_checkpoint_at 5 \
+    -start_checkpoint_at 0 \
     -save_model $save_model_dir \
     -max_grad_norm 1 \
     -gpu $gpu_device_id \
