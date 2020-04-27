@@ -74,7 +74,18 @@ def make_encoder(opt, embeddings):
                           opt.bridge)
         
     else:
+        # NOTE: THIS IS WHAT GETS TRIGGERED BY DEFAULT EXPERIMENT
         # "rnn" or "brnn"
+
+        print('About to make encoder')
+        print(f"opt.rnn_type={opt.rnn_type}")
+        print(f"opt.brnn={opt.brnn}")
+        print(f"opt.enc_layers={opt.enc_layers}")
+        print(f"opt.rnn_size ={opt.rnn_size}")
+        print(f"opt.dropout={opt.dropout}")
+        print(f"embeddings={embeddings}")
+        print(f"opt.bridge={opt.bridge}")
+        
         return RNNEncoder(opt.rnn_type, opt.brnn, opt.enc_layers,
                           opt.rnn_size, opt.dropout, embeddings,
                           opt.bridge)
@@ -96,7 +107,22 @@ def make_decoder(opt, embeddings):
                           opt.global_attention, opt.copy_attn,
                           opt.cnn_kernel_width, opt.dropout,
                           embeddings)
+
+    # NOTE: THIS IS WHAT GETS TRIGGERED IN DEFAULT EXPERIMENTS
     elif opt.decoder_type == "charrnn":
+        
+        print(f"opt.rnn_type={opt.rnn_type}")
+        print(f"opt.brnn={opt.brnn}")
+        print(f"opt.dec_lay={opt.dec_layers}")
+        print(f"opt.rnn_size={opt.rnn_size}")
+        print(f"opt.global_attention={opt.global_attention}")
+        print(f"opt.coverage_attn={opt.coverage_attn}")
+        print(f"opt.context_gate={opt.context_gate}")
+        print(f"opt.copy_attn={opt.copy_attn}")
+        print(f"opt.dropout={opt.dropout}")
+        print(f"embeddings={embeddings}")
+        print(f"opt.reuse_copy_attn={opt.reuse_copy_attn}")
+
         return [StdWordRNNDecoder(opt.rnn_type, opt.brnn,
                                    opt.dec_layers, opt.rnn_size,
                                    opt.global_attention,
@@ -209,9 +235,12 @@ def make_base_model(model_opt, fields, gpu, checkpoint=None):
     if model_opt.encoder_type == "trigramrnn" and model_opt.decoder_type == "rnn":
         decoder = make_decoder(model_opt, tgt_embeddings)
         model = NMTSourceTrigramModel(encoder, decoder)
+    
+    # NOTE: This is what gets triggered by the default experiments!
     elif model_opt.encoder_type == "brnn" and model_opt.decoder_type == "charrnn":
         [decoder1, decoder2] = make_decoder(model_opt, tgt_embeddings)
         model = NMTTargetCharModel(encoder, decoder1, decoder2)
+
     elif model_opt.encoder_type == "trigramrnn" and model_opt.decoder_type == "charrnn":
         [decoder1, decoder2] = make_decoder(model_opt, tgt_embeddings)
         model = CharNMTModel(encoder, decoder1, decoder2)

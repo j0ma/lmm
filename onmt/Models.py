@@ -1208,6 +1208,8 @@ class NMTTargetCharModel(nn.Module):
       encoder (:obj:`EncoderBase`): an encoder object
       decoder (:obj:`RNNDecoderBase`): a decoder object
       multi<gpu (bool): setup for multigpu support
+
+    NOTE: THIS IS WHAT GETS TRIGGERED BY DEFAULT EXPERIMENTS
     """
     def __init__(self, encoder, decoder1, decoder2, multigpu=False):
         self.multigpu = multigpu
