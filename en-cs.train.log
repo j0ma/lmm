@@ -3,6 +3,40 @@ Source data type: words
 Target data type: characters
  * vocabulary size. source = 15576
 Building model...
+About to make encoder
+opt.rnn_type=GRU
+opt.brnn=True
+opt.enc_layers=1
+opt.rnn_size =512
+opt.dropout=0.2
+embeddings=Embeddings(
+  (make_embedding): Sequential(
+    (emb_luts): Elementwise(
+      (0): Embedding(15576, 512, padding_idx=1)
+    )
+    (dropout): Dropout(p=0.2, inplace=False)
+  )
+)
+opt.bridge=False
+This is make_decoder()
+opt.rnn_type=GRU
+opt.brnn=True
+opt.dec_lay=3
+opt.rnn_size=512
+opt.global_attention=general
+opt.coverage_attn=False
+opt.context_gate=None
+opt.copy_attn=False
+opt.dropout=0.2
+embeddings=Embeddings(
+  (make_embedding): Sequential(
+    (emb_luts): Elementwise(
+      (0): Embedding(1004, 512, padding_idx=1)
+    )
+    (dropout): Dropout(p=0.2, inplace=False)
+  )
+)
+opt.reuse_copy_attn=False
 Initializing model parameters.
 NMTTargetCharModel(
   (encoder): RNNEncoder(
@@ -30,6 +64,8 @@ NMTTargetCharModel(
       (dropout): Dropout(p=0.2, inplace=False)
       (layers): ModuleList(
         (0): GRUCell(1024, 512)
+        (1): GRUCell(512, 512)
+        (2): GRUCell(512, 512)
       )
     )
     (attn): GlobalAttention(
@@ -95,9 +131,9 @@ NMTTargetCharModel(
     (1): LogSoftmax()
   )
 )
-* number of parameters: 17947684
+* number of parameters: 21099556
 encoder:  9157632
-decoder:  8790052
+decoder:  11941924
 Making optimizer for training.
 
 Start training...
@@ -105,37 +141,3 @@ Start training...
  * batch size: 64
 
 Loading train dataset from /home/ubuntu/lmm-data/en-cs/demo.train.1.pt, number of examples: 92507
-Epoch  1,    50/ 1446; acc:  59.13; ppl:  17.90; 1211 src tok/s; 2049 tgt tok/s;     56 s elapsed
-Epoch  1,   100/ 1446; acc:  66.71; ppl:   7.53; 1356 src tok/s; 2310 tgt tok/s;    103 s elapsed
-Epoch  1,   150/ 1446; acc:  67.90; ppl:   6.77; 1260 src tok/s; 2132 tgt tok/s;    153 s elapsed
-Epoch  1,   200/ 1446; acc:  68.39; ppl:   6.36; 1380 src tok/s; 2350 tgt tok/s;    201 s elapsed
-Epoch  1,   250/ 1446; acc:  68.52; ppl:   6.03; 1264 src tok/s; 2134 tgt tok/s;    254 s elapsed
-Epoch  1,   300/ 1446; acc:  69.58; ppl:   5.78; 1356 src tok/s; 2302 tgt tok/s;    300 s elapsed
-Epoch  1,   350/ 1446; acc:  70.37; ppl:   5.48; 1351 src tok/s; 2312 tgt tok/s;    343 s elapsed
-Epoch  1,   400/ 1446; acc:  69.95; ppl:   5.57; 1375 src tok/s; 2309 tgt tok/s;    396 s elapsed
-Epoch  1,   450/ 1446; acc:  70.84; ppl:   5.30; 1360 src tok/s; 2310 tgt tok/s;    445 s elapsed
-Epoch  1,   500/ 1446; acc:  71.05; ppl:   5.19; 1279 src tok/s; 2187 tgt tok/s;    494 s elapsed
-Epoch  1,   550/ 1446; acc:  71.84; ppl:   4.92; 1320 src tok/s; 2263 tgt tok/s;    535 s elapsed
-Epoch  1,   600/ 1446; acc:  71.05; ppl:   5.10; 1380 src tok/s; 2318 tgt tok/s;    591 s elapsed
-Epoch  1,   650/ 1446; acc:  71.61; ppl:   4.96; 1332 src tok/s; 2261 tgt tok/s;    640 s elapsed
-Epoch  1,   700/ 1446; acc:  72.06; ppl:   4.80; 1360 src tok/s; 2305 tgt tok/s;    688 s elapsed
-Epoch  1,   750/ 1446; acc:  71.78; ppl:   4.83; 1385 src tok/s; 2322 tgt tok/s;    740 s elapsed
-Epoch  1,   800/ 1446; acc:  72.41; ppl:   4.67; 1278 src tok/s; 2179 tgt tok/s;    786 s elapsed
-Epoch  1,   850/ 1446; acc:  72.29; ppl:   4.65; 1316 src tok/s; 2228 tgt tok/s;    837 s elapsed
-Epoch  1,   900/ 1446; acc:  72.41; ppl:   4.55; 1328 src tok/s; 2254 tgt tok/s;    884 s elapsed
-Epoch  1,   950/ 1446; acc:  72.53; ppl:   4.51; 1360 src tok/s; 2288 tgt tok/s;    934 s elapsed
-Epoch  1,  1000/ 1446; acc:  72.70; ppl:   4.45; 1354 src tok/s; 2304 tgt tok/s;    980 s elapsed
-Epoch  1,  1050/ 1446; acc:  72.98; ppl:   4.34; 1348 src tok/s; 2291 tgt tok/s;   1026 s elapsed
-Epoch  1,  1100/ 1446; acc:  72.75; ppl:   4.40; 1344 src tok/s; 2272 tgt tok/s;   1076 s elapsed
-Epoch  1,  1150/ 1446; acc:  72.54; ppl:   4.44; 1310 src tok/s; 2199 tgt tok/s;   1130 s elapsed
-Epoch  1,  1200/ 1446; acc:  73.68; ppl:   4.16; 1338 src tok/s; 2277 tgt tok/s;   1175 s elapsed
-Epoch  1,  1250/ 1446; acc:  73.40; ppl:   4.22; 1373 src tok/s; 2319 tgt tok/s;   1223 s elapsed
-Epoch  1,  1300/ 1446; acc:  73.55; ppl:   4.14; 1286 src tok/s; 2176 tgt tok/s;   1274 s elapsed
-Epoch  1,  1350/ 1446; acc:  73.56; ppl:   4.09; 1356 src tok/s; 2301 tgt tok/s;   1323 s elapsed
-Epoch  1,  1400/ 1446; acc:  73.75; ppl:   4.04; 1299 src tok/s; 2223 tgt tok/s;   1371 s elapsed
-Train perplexity: 5.15015
-Train accuracy: 71.1011
-Loading valid dataset from /home/ubuntu/lmm-data/en-cs/demo.valid.1.pt, number of examples: 3004
-Validation perplexity: 4.20621
-Validation accuracy: 72.6968
-Decaying learning rate to 0.00027
