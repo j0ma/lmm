@@ -1,5 +1,6 @@
 Building model...
-About to make encoder
+
+# ENCODER
 opt.rnn_type=GRU
 opt.brnn=True
 opt.enc_layers=1
@@ -14,26 +15,38 @@ embeddings=Embeddings(
   )
 )
 opt.bridge=False
+
+# DECODER 
 This is make_decoder()
-opt.rnn_type=GRU
-opt.brnn=True
-opt.dec_lay=1
-opt.rnn_size=512
-opt.global_attention=general
-opt.coverage_attn=False
-opt.context_gate=None
-opt.copy_attn=False
-opt.dropout=0.2
-embeddings=Embeddings(
+
+"""
+So given all this, it seems like;
+- There are 2 decoders with the same options
+    - StdWordRNNDecoder & StdCharRNNDecoder
+- There is only 1 decoding layer
+    - Wat, this doesn't go according to the experiments?
+"""
+
+opt.rnn_type=GRU                                # What kind of RNN?
+opt.brnn=True                                   # Should it be bidirectional?
+opt.dec_lay=1                                   # How many dconding layers?
+opt.rnn_size=512                                # Size of hidden dimension?
+opt.global_attention=general                    # What kind of attention?
+opt.coverage_attn=False                         # ------------------------
+opt.context_gate=None                           # ------------------------
+opt.copy_attn=False                             # ------------------------
+opt.dropout=0.2                                 # What is the dropout prob?
+embeddings=Embeddings(                          # 512 dimensional embeddings 
   (make_embedding): Sequential(
-    (emb_luts): Elementwise(
+    (emb_luts): Elementwise(                    # emb_luts = lookup tables
       (0): Embedding(1004, 512, padding_idx=1)
     )
     (dropout): Dropout(p=0.2, inplace=False)
   )
 )
-opt.reuse_copy_attn=False
-Initializing model parameters.
+opt.reuse_copy_attn=False                       # ------------------------
+
+# ACTUAL MODEL 
 NMTTargetCharModel(
   (encoder): RNNEncoder(
     (embeddings): Embeddings(

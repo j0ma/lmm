@@ -1,7 +1,6 @@
 import torch
 import torch.nn as nn
 
-
 class StackedLSTM(nn.Module):
     """
     Our own implementation of stacked LSTM.

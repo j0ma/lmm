@@ -121,6 +121,8 @@ class RNNEncoder(EncoderBase):
         hidden_size = hidden_size // num_directions
         self.embeddings = embeddings
 
+        # This self.rnn object will be an instance of GRU class
+        #   -> matches what i have in my reimplementation
         self.rnn, self.no_pack_padded_seq = \
             rnn_factory(rnn_type,
                         input_size=embeddings.embedding_size,
@@ -130,11 +132,11 @@ class RNNEncoder(EncoderBase):
                         bidirectional=bidirectional)
 
         # Initialize the bridge layer
-        self.use_bridge = use_bridge
-        if self.use_bridge:
-            self._initialize_bridge(rnn_type,
-                                    hidden_size,
-                                    num_layers)
+        # self.use_bridge = use_bridge
+        # if self.use_bridge:
+            # self._initialize_bridge(rnn_type,
+                                    # hidden_size,
+                                    # num_layers)
 
     def forward(self, src, lengths=None, encoder_state=None):
         "See :obj:`EncoderBase.forward()`"
@@ -154,8 +156,9 @@ class RNNEncoder(EncoderBase):
         if lengths is not None and not self.no_pack_padded_seq:
             memory_bank = unpack(memory_bank)[0]
 
-        if self.use_bridge:
-            encoder_final = self._bridge(encoder_final)
+        # if self.use_bridge:
+            # encoder_final = self._bridge(encoder_final)
+
         return encoder_final, memory_bank
 
     def _initialize_bridge(self, rnn_type,
@@ -981,7 +984,6 @@ class StdCharRNNDecoder(RNNCharDecoderBase):
         return self.embeddings.embedding_size + self.hidden_size
 
 
-
 class StdWordRNNDecoder(RNNWordDecoderBase):
     """
     Input feeding based decoder. See :obj:`RNNDecoderBase` for options.
@@ -996,34 +998,85 @@ class StdWordRNNDecoder(RNNWordDecoderBase):
                  coverage_attn=False, context_gate=None,
                  copy_attn=False, dropout=0.0, embeddings=None,
                  reuse_copy_attn=False):
+        
         super(StdWordRNNDecoder, self)\
             .__init__(rnn_type, bidirectional_encoder, num_layers,
                  hidden_size, attn_type, coverage_attn,
                  context_gate, copy_attn, dropout, embeddings,
                  reuse_copy_attn)
+       
+        # we need a character rnn
+        """
+        Character RNN
+        -------------
+        - Input: 512 dimensional vectors
+        - Hidden: 256 bidirectional GRU
+            -> thus, concat of fwd and bwd state = 512 dim
+        - Output: ???
+        """
         self.char_rnn, _ = \
             rnn_factory(rnn_type,
-                        input_size=embeddings.embedding_size,
-                        hidden_size=embeddings.embedding_size//2,
-                        num_layers=1,
-                        dropout=dropout,
-                        bidirectional=True)
-        self.combine_states = nn.Linear(embeddings.embedding_size, embeddings.embedding_size)
+                        input_size=embeddings.embedding_size,       # - this is 512
+                        hidden_size=embeddings.embedding_size//2,   # - this will be 256
+                                                                    #     so concat=512
+                        num_layers=1,                               # - single layer
+                        dropout=dropout,                            # - includes dropout
+                        bidirectional=True)                         # - always bidir.
+
+
+        # linear layer for combining characf
+        self.combine_states = nn.Linear(embeddings.embedding_size, 
+                                        embeddings.embedding_size)
+
+        # size of the embedding (dimension)
         self.rnn_size = embeddings.embedding_size
+
+        # dropout layer
         self.dropout = nn.Dropout(p=dropout)
+
+        # NOTE: not used
         self.word2char = nn.Linear(self.rnn_size*3, self.rnn_size, bias=True)
+
+        # helpers
         self.tanh = nn.Tanh()
         self.lemma_dim = 100
         self.kuma_dim = 10
+
+        # sampling layers for VAE
         self.sampler_z = DiagonalGaussianSampler(self.lemma_dim, hidden_size)
-        self.substract = nn.Linear(self.lemma_dim, hidden_size, bias=True)
         self.sampler_f = KumaSampler(self.kuma_dim, hidden_size+self.lemma_dim)
+
+        # also not used, weirdly 
+        self.substract = nn.Linear(self.lemma_dim, hidden_size, bias=True)
+
+        # dense layer to compose (z,f) -> t
         self.wordcomposition = nn.Linear(self.lemma_dim+self.kuma_dim, hidden_size, bias=True)
 
     def _run_forward_pass(self, tgt, memory_bank, batch_size, state, memory_lengths=None, translate=False):
         """
         See StdRNNDecoder._run_forward_pass() for description
         of arguments and return values.
+
+        From base class:
+        ----------------
+        Private helper for running the specific RNN forward pass.
+        Must be overriden by all subclasses.
+        Args:
+            tgt (LongTensor): a sequence of input tokens tensors
+                                 [len x batch x nfeats].
+            memory_bank (FloatTensor): output(tensor sequence) from the encoder
+                        RNN of size (src_len x batch x hidden_size).
+            state (FloatTensor): hidden state from the encoder RNN for
+                                 initializing the decoder.
+            memory_lengths (LongTensor): the source memory_bank lengths.
+        Returns:
+            decoder_final (Variable): final hidden state from the decoder.
+            decoder_outputs ([FloatTensor]): an array of output of every time
+                                     step from the decoder.
+            attns (dict of (str, [FloatTensor]): a dictionary of different
+                            type of attention Tensor array of every time
+                            step from the decoder.
+
         """
 
         # Additional args check.
@@ -1038,26 +1091,42 @@ class StdWordRNNDecoder(RNNWordDecoderBase):
             attns["coverage"] = []
 
         # Predict word representations with the bi-directional char-rnn
-        char_embs = self.embeddings(tgt)
+        char_embs = self.embeddings(tgt) 
+
+        # Ensure we have 3 dimensions in our tensor
         assert char_embs.dim() == 3  # len x batch x embedding_dim
+
+        # Take note of what the dimensions represent 
         chars_len, batch_seqlen, emb_dim = char_embs.size()
-        
-        words_memory_bank, final_char = self.char_rnn(char_embs)
+       
+        # Forward-prop the character embeddings 
+        # QUESTION: what is word_memory_bank? 
+        #           shouldn't memory_bank be source-side repr?
+        words_memory_bank, final_char = self.char_rnn(char_embs)                
         words_memory_bank = words_memory_bank + char_embs # resid connection
 
+        # Get both forward state and backward state
         back_state = words_memory_bank[0, :, self.rnn_size//2:]
         forw_state = []
         forw_state = words_memory_bank[-1, :, :self.rnn_size//2]
-        word_embs = self.combine_states(torch.cat([back_state, forw_state], dim=-1))
-        word_embs = torch.cat(word_embs.unsqueeze(1).split(batch_seqlen // batch_size, dim=0), dim=1) # n_words x batch_size x dim
 
+        # Combine backward and forward char representations to get word embeddings
+        word_embs = self.combine_states(torch.cat([back_state, forw_state], dim=-1))
+
+        # Make sure word embeddings have the correct size
+        # n_words x batch_size x dim
+        word_embs = torch.cat(word_embs
+                                .unsqueeze(1)
+                                .split(batch_seqlen//batch_size, 
+                                       dim=0), dim=1) 
+
+        # Apply dropout to the word embeddings
         word_embs = self.dropout(word_embs)
 
+        # Save the important numbers in variables
         tgt_len, tgt_batch, _ = word_embs.size()
 
         hidden = state.hidden
-        coverage = state.coverage.squeeze(0) \
-            if state.coverage is not None else None
 
         # Input feed concatenates hidden state with
         # input at every time step.
@@ -1069,11 +1138,13 @@ class StdWordRNNDecoder(RNNWordDecoderBase):
                 input_feed = input_feed.squeeze(0)
 
             # Get the word prediction with the word-level RNN.
+            # NOTE: is this the "previous word representation y_{t_1} from Fig 1"?
+            # note: at the end input_feed = ctx (context)
             wordrnn_input = torch.cat([emb_t, input_feed], 1)
 
-            #import pdb; pdb.set_trace()
-            wordrnn_output, hidden = self.rnn(wordrnn_input, hidden)
-
+            # NOTE: This output is then h_i from Fig 1
+            # THIS IS WHERE THE 3-LAYER STACKED GRU HAPPENS
+            wordrnn_output, hidden = self.rnn(wordrnn_input, hidden) 
             wordrnn_output = wordrnn_output + emb_t # resid connection
             wordrnn_output = self.dropout(wordrnn_output)
 
@@ -1081,53 +1152,42 @@ class StdWordRNNDecoder(RNNWordDecoderBase):
             z = self.sampler_z(wordrnn_output, batch_size, translate) # lemma
             f, logloss = self.sampler_f(torch.cat([wordrnn_output, z], dim=1), batch_size, translate) # morphological features
             word_rep = self.tanh(self.wordcomposition(torch.cat([z, f], dim=1)))
-            # f = torch.Tensor([[0,0,0,0,0,0,0,0,0,0],
-                              # [0,0,0,0,0,0,0,0,0,0],
-                              # [0,0,0,0,0,0,0,0,0,0],
-                              # [0,0,0,0,0,0,0,0,0,0],
-                              # [0,0,0,0,0,0,0,0,0,0]]).cuda()
-            # logloss=0
             
             # print('About to calculate word composition from encoder:')
             # print(f'Dimension of z: {z.size()}')
             # print(f'Dimension of f: {f.size()}')
-            # word_rep = self.wordcomposition(torch.cat([z, f], dim=1))
+            
             # Get the predicted word using the attention.
+            
+            # NOTE: `word_rep` is equivalent to t_i in the paper
+            #        and thus it will be the vector that initializes
+            #        the char-level decoder (WAT??)
+
+            # NOTE: here are the outputs in conventional language
+            #   - attn_out: h_tilde ("attentional vector" in Luong)
+            #   - p_attn:   alphas / attention weights
+            #   - ctx:      the actual context vectors (incl in attn_out!)
             attn_out, p_attn, ctx = self.attn(
                 word_rep,
                 memory_bank.transpose(0, 1),
                 memory_lengths=memory_lengths)
-            if self.context_gate is not None:
-                # TODO: context gate should be employed
-                # instead of second RNN transform.
-                word_pred = self.context_gate(
-                    wordrnn_input, wordrnn_output, word_pred
-                )
 
+            # Apply dropout to the context vector? Was?
             ctx = self.dropout(ctx)
-            input_feed = ctx
+            input_feed = ctx         # seems like we feed the previous ctx
+                                     # and not the previous h_tilde?
 
-            outputs += [attn_out]
-            attns["std"] += [p_attn]
-
-            # Update the coverage attention.
-            if self._coverage:
-                coverage = coverage + p_attn \
-                    if coverage is not None else p_attn
-                attns["coverage"] += [coverage]
-
-            # Run the forward pass of the copy attention layer.
-            if self._copy and not self._reuse_copy_attn:
-                _, copy_attn = self.copy_attn(word_pred,
-                                              memory_bank.transpose(0, 1))
-                attns["copy"] += [copy_attn]
-            elif self._copy:
-                attns["copy"] = attns["std"]
+            outputs += [attn_out]    # same here
+            attns["std"] += [p_attn] # this will be a list of lists
 
             # Return result.
         return attns, outputs, hidden, ctx, logloss
 
     def _build_rnn(self, rnn_type, input_size,
+        """
+        NOTE: We build a StackedGRU object!
+            -> self.rnn = StackedGRU()
+        """
                    hidden_size, num_layers, dropout):
         assert not rnn_type == "SRU", "SRU doesn't support input feed! " \
                 "Please set -input_feed 0!"
@@ -1254,10 +1314,12 @@ class NMTTargetCharModel(nn.Module):
         tgt2 = torch.cat(tgt2.unbind(2), dim=1)
 
         enc_final, memory_bank = self.encoder(src, lengths)
-        
+       
+        # this should just do some fixing in terms of the shape of enc_final
         enc_state = \
             self.decoder1.init_decoder_state(src, memory_bank, enc_final)
 
+        # this, on the other hand, actually conducts the word-level decoder f-pass
         attns, ctxs, dec_state, logloss = \
             self.decoder1(tgt1, memory_bank, batch_size,
                          enc_state if dec_state is None
@@ -1275,13 +1337,19 @@ class NMTTargetCharModel(nn.Module):
         tgt2_new = tgt2_new[:-1,:,:] #exclude the last char from the input
         tgt2_neww = (tgt2_new != 4).long()*tgt2_new + (tgt2_new == 4).long()
 
-        char_state = \
-            self.decoder2.init_decoder_state((dec_state.input_feed,), self.decoder1.embeddings.embedding_size)
+        # initialize character level decoder with word level decoder state
+        char_state = self.decoder2\
+                         .init_decoder_state(
+                                 (dec_state.input_feed,), 
+                                 self.decoder1\
+                                     .embeddings\
+                                     .embedding_size)
 
         
-        decoder_outputs, char_state = \
-            self.decoder2(tgt2_neww, batch_size,
-                         ctxs, char_state)
+        decoder_outputs, char_state = self.decoder2(tgt2_neww, 
+                                                    batch_size,
+                                                    ctxs, 
+                                                    char_state)
 
         if self.multigpu:
             # Not yet supported on multi-gpu

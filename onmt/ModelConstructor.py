@@ -123,6 +123,20 @@ def make_decoder(opt, embeddings):
         print(f"embeddings={embeddings}")
         print(f"opt.reuse_copy_attn={opt.reuse_copy_attn}")
 
+        """
+        rnn_type, 
+        bidirectional_encoder, 
+        num_layers,
+        hidden_size, 
+        attn_type="general",
+        coverage_attn=False, 
+        context_gate=None,
+        copy_attn=False,
+        dropout=0.0, 
+        embeddings=None,
+        reuse_copy_attn=False):
+        """
+
         return [StdWordRNNDecoder(opt.rnn_type, opt.brnn,
                                    opt.dec_layers, opt.rnn_size,
                                    opt.global_attention,
