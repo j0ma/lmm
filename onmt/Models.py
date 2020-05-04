@@ -1184,11 +1184,12 @@ class StdWordRNNDecoder(RNNWordDecoderBase):
         return attns, outputs, hidden, ctx, logloss
 
     def _build_rnn(self, rnn_type, input_size,
+                   hidden_size, num_layers, dropout):
+
         """
         NOTE: We build a StackedGRU object!
             -> self.rnn = StackedGRU()
         """
-                   hidden_size, num_layers, dropout):
         assert not rnn_type == "SRU", "SRU doesn't support input feed! " \
                 "Please set -input_feed 0!"
         if rnn_type == "LSTM":
